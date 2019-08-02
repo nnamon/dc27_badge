@@ -759,7 +759,8 @@ void update_bullets(void) {
             dmg = dmg * 1.1;
           }
 
-          current_enemy->hp = current_enemy->hp - dmg;
+          //current_enemy->hp = current_enemy->hp - dmg;
+          current_enemy->hp = 0;
 
           i2sPlay("game/explode2.snd");
 
@@ -2547,10 +2548,10 @@ void check_ship_collisions(void) {
         player->e.vecVelocityGoal.x = -player->e.vecVelocityGoal.x * .85;
         player->e.vecVelocityGoal.y = -player->e.vecVelocityGoal.y * .85;
         // sound
-        // take damage
+        // (do not) take damage
         if (!player->is_shielded) {
             i2sPlay("game/aground.snd");
-            player->hp = player->hp - (int)((float)PLAYER_MAX_HP * 0.1);
+            player->hp = player->hp + (int)((float)PLAYER_MAX_HP * 0.1);
             send_state_update(BATTLE_OP_HP_UPDATE, player->hp);
             redraw_player_bars();
         }

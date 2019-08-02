@@ -151,7 +151,7 @@ otasend_start (OrchardAppContext *context)
 		p->fwcnt = 0;
 		nullProtStop ();
 	} else
-		f_open (&p->f, "0:BADGE.BIN", FA_READ);
+		f_open (&p->f, "0:REDPILL.BIN", FA_READ);
 
 	p->listitems[0] = "Choose a peer";
 	p->listitems[1] = "Exit";

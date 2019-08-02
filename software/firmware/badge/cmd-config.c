@@ -16,6 +16,7 @@
 
 #include "badge.h"
 #include "unlocks.h"
+#include "ble_lld.h"
 
 /* This is defined in led.c, we need access to it for this config */
 extern uint8_t ledsOff;
@@ -74,6 +75,24 @@ static void cmd_config_show(BaseSequentialStream *chp, int argc, char *argv[])
   printf ("won/lost   %d/%d\n\n",
            config->won,
            config->lost);
+
+  printf ("Secrets\n");
+  printf ("-------\n");
+  printf ("UL_CODE_0          0x%lx\n", *UL_CODE_0);
+  printf ("UL_CODE_1          0x%lx\n", *UL_CODE_1);
+  printf ("UL_CODE_2          0x%lx\n", *UL_CODE_2);
+  printf ("UL_CODE_3          0x%lx\n", *UL_CODE_3);
+  printf ("UL_CODE_4          0x%lx\n", *UL_CODE_4);
+  printf ("UL_CODE_5          0x%lx\n", *UL_CODE_5);
+  printf ("UL_CODE_6          0x%lx\n", *UL_CODE_6);
+  printf ("UL_CODE_7          0x%lx\n", *UL_CODE_7);
+  printf ("UL_CODE_8          0x%lx\n", *UL_CODE_8);
+  printf ("UL_CODE_9          0x%lx\n", *UL_CODE_9);
+  printf ("UL_CODE_10         0x%lx\n", *UL_CODE_10);
+  printf ("UL_PUZPIN_KEY      0x%lx%lx\n", NRF_UICR->CUSTOMER[19], NRF_UICR->CUSTOMER[18];
+  printf ("UL_PUZMODE_PIN     0x%lx\n", *UL_PUZMODE_PIN);
+  printf ("BLE_IDES_PASSWORD  %s\n", BLE_IDES_PASSWORD);
+
 }
 
 static void cmd_config_set(BaseSequentialStream *chp, int argc, char *argv[]) {
@@ -81,7 +100,7 @@ static void cmd_config_set(BaseSequentialStream *chp, int argc, char *argv[]) {
   (void)argc;
 
   unsigned int val;
-  
+
   userconfig *config = getConfig();
 
   if (argc != 3) {
@@ -106,8 +125,8 @@ static void cmd_config_set(BaseSequentialStream *chp, int argc, char *argv[]) {
     return;
   }
 
-  if ((config->unlocks & UL_BLACKBADGE) == 0)
-    goto skip;
+  //if ((config->unlocks & UL_BLACKBADGE) == 0)
+  //  goto skip;
 
   val = strtoul (argv[2], NULL, 0);;
 
@@ -159,7 +178,19 @@ static void cmd_config_set(BaseSequentialStream *chp, int argc, char *argv[]) {
     return;
   }
 
-skip:
+  if (!strcasecmp(argv[1], "ships_enabled")) {
+    config->ships_enabled = val;
+    printf ("ships_enabled set to %d.\n", config->ships_enabled);
+    return;
+  }
+
+  if (!strcasecmp(argv[1], "puz_enabled")) {
+    config->puz_enabled = val;
+    printf ("puz_enabled set to %d.\n", config->puz_enabled);
+    return;
+  }
+
+//skip:
 
   printf ("Invalid set command.\n");
 }
